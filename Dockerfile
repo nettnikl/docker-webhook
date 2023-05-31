@@ -1,5 +1,5 @@
 # Dockerfile for https://github.com/adnanh/webhook
-FROM        golang:alpine3.11 AS build
+FROM        golang:alpine AS build
 MAINTAINER  Almir Dzinovic <almir@dzinovic.net>
 WORKDIR     /go/src/github.com/adnanh/webhook
 ENV         WEBHOOK_VERSION 2.8.1
