@@ -1,0 +1,58 @@
+name: Docker Build
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'master'
+    tags:
+      - '*.*.*'
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  build-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      # Get the repository's code
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # https://github.com/docker/setup-qemu-action
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      # https://github.com/docker/setup-buildx-action
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta_webhook_docker
+        uses: docker/metadata-action@v3
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            almir/webhook
+          # Docker tags based on the following events/attributes
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta_webhook_docker.outputs.tags }}
+          labels: ${{ steps.meta_webhook_docker.outputs.labels }}
