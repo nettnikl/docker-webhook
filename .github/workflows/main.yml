@@ -46,7 +46,8 @@ jobs:
             almir/webhook
           tags: |
             type=ref,event=branch
-            type=semver,pattern={{version}}
+            type=semver,pattern={{version}},enable={{github.ref_type == 'tag'}}
+            type=plain,value=latest,enable={{github.ref_type == 'tag'}}
 
       # https://github.com/docker/build-push-action
       - name: Build and push
