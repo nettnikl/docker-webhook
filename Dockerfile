@@ -29,3 +29,4 @@ VOLUME ["/etc/webhook"]
 EXPOSE 9000
 
 ENTRYPOINT ["/usr/local/bin/webhook"]
+CMD ["-hooks=/etc/webhook/hooks.yaml"]
