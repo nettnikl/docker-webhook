@@ -19,11 +19,18 @@ RUN curl -L --silent -o webhook.tar.gz https://github.com/adnanh/webhook/archive
     CGO_ENABLED=0 go build -ldflags="-s -w" -o /usr/local/bin/webhook
 
 
+FROM backplane/upx:latest AS upx
+
+COPY --from=builder /usr/local/bin/webhook .
+
+RUN upx --best --lzma /webhook
+
+
 FROM scratch
 
 WORKDIR /etc/webhook
 
-COPY --from=build /usr/local/bin/webhook /usr/local/bin/webhook
+COPY --from=upx /webhook /usr/local/bin/
 
 VOLUME ["/etc/webhook"]
 EXPOSE 9000
