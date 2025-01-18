@@ -1,5 +1,4 @@
-# Dockerfile for https://github.com/adnanh/webhook
-FROM golang:alpine AS build
+FROM golang:alpine AS builder
 
 LABEL maintainer="Almir Dzinovic <almir@dzinovic.net>"
 
