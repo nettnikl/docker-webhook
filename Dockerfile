@@ -1,6 +1,6 @@
 FROM golang:alpine AS builder
 
-LABEL maintainer="Almir Dzinovic <almir@dzinovic.net>"
+LABEL maintainer="nettnikl"
 
 WORKDIR /go/src/github.com/adnanh/webhook
 
