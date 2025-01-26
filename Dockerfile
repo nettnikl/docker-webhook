@@ -23,7 +23,13 @@ FROM alpine
 
 WORKDIR /etc/webhook
 
-RUN apk add --no-cache bash curl docker-cli docker-compose git
+RUN apk add --no-cache \
+    bash \
+    curl \
+    jq \
+    docker-cli \
+    docker-compose \
+    git
 
 COPY --from=build /usr/local/bin/webhook /usr/local/bin/webhook
 
